@@ -10,7 +10,7 @@ def is_stock_elevating(stock_token: str, start: str, time_delta_in_days: int) ->
     date_parts[2] = str(int(date_parts[2]) + time_delta_in_days).zfill(2)
     end = '-'.join(date_parts)
 
-    dataframe = ticker.history(start=start, end=end)
+    dataframe = ticker.history(start=start, end=end, interval='1h')
     m, b = calculate_best_fitting_line(dataframe)
     # plot_dataframe(dataframe)
     print(m, b)
