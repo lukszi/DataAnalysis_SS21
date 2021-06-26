@@ -19,7 +19,12 @@ class RedditPostsTable(Base):
     id = Column(Integer, primary_key=True)
     post_url = Column(String)
     posted = Column(DATETIME)
-    votes_updated = Column(DATETIME)
+    score_updated = Column(DATETIME)
+    score = Column(Integer)
+    up_votes = Column(Integer)
+    down_votes = Column(Integer)
+    upvote_ratio = Column(Float)
+    num_comments = Column(Integer)
     stocks = relationship("StocksTable",
                           secondary=reddit_posts_stocks_association_table)
 
@@ -39,7 +44,7 @@ def create_database_if_not_exists():
         engine = create_engine(f'sqlite:///{DATABASE_NAME}')
         Base.metadata.create_all(bind=engine)
     else:
-        print('Database already exists')
+        print('database already exists')
 
 
 if __name__ == "__main__":
