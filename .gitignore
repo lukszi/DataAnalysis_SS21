@@ -1,3 +1,4 @@
 .idea/
 venv/
 res/reddit_config.json
+/res/RedditStocks.db

@@ -11,6 +11,13 @@ Session = sessionmaker(engine)
 
 
 def add_reddit_post(post_url: str, posted: datetime, votes_updated: datetime, stocks_token: List[str] = None):
+    """
+    Adds a reddit post to the 'RedditStocks.db' database with all stocks mentioned.
+    :param post_url: reddit post url
+    :param posted: reddit post creation date
+    :param votes_updated: last time reddit votes got updated
+    :param stocks_token: a list of all stock tokens mentioned in the reddit post
+    """
     conn = engine.connect()
     with Session(bind=conn) as session:
         reddit_post = RedditPostsTable(post_url=post_url,
