@@ -1,7 +1,6 @@
 import pandas as pd
 from ahocorapy.keywordtree import KeywordTree
-from pandas import DataFrame
-import numpy as np
+from pandas import DataFrame, Series
 
 
 class SymbolExtractor:
@@ -35,10 +34,9 @@ class SymbolExtractor:
 
     def __create_search_tree(self):
         self.__searchTree = KeywordTree()
-        tickers: np.array = self.__tickers.Ticker
-        # FIXME
-        # for ticker in np.nditer(tickers):
-        #     self.__searchTree.add(ticker)
+        tickers: Series = self.__tickers.Ticker
+        for ticker in tickers:
+            self.__searchTree.add(ticker)
         self.__searchTree.finalize()
 
 
