@@ -2,5 +2,6 @@ praw==7.3.0
 yfinance~=0.1.59
 matplotlib~=3.4.2
 dataclasses-json~=0.5.4
+get-all-tickers~=1.7
 SQLAlchemy~=1.4.19
 numpy~=1.20.3
