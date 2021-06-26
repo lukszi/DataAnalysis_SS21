@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from typing import List
 
-from praw.models import Subreddit
+from praw.models import Subreddit, Submission
 from praw import Reddit
 
 from DataAnalysis_SS21.retrieval.reddit.helper_methods import print_attrs
@@ -29,19 +29,20 @@ class RedditExtractor:
         parsed_posts: List[StockMention] = []
         wsb_new = self.__wsb.new(limit=n)
         for submission in wsb_new:
-            print_attrs(submission, ["title", "score", "permalink", "url", "is_video", "is_meta" "is_self", "self_text",
-                                     "ups", "downs", "upvote_ratio", "num_comments", "num_crossposts"])
-
             tickers_in_submission = self.__symbol_extractor.extract_symbols(submission)
             if len(tickers_in_submission) == 0:
                 continue
 
-            posted = datetime.fromtimestamp(submission.created_utc)
-            mention = StockMention(submission.url, tickers_in_submission, posted, datetime.now(), submission.score,
-                                   submission.ups, submission.downs, submission.upvote_ratio, submission.num_comments)
+            mention = self.__create_model(submission, tickers_in_submission)
             parsed_posts.append(mention)
-            print(f"Symbols:\t{tickers_in_submission}\n\n")
         return parsed_posts
+
+    @staticmethod
+    def __create_model(submission: Submission, tickers_in_submission: List[str]) -> StockMention:
+        posted = datetime.fromtimestamp(submission.created_utc)
+        mention = StockMention(submission.url, tickers_in_submission, posted, datetime.now(), submission.score,
+                               submission.ups, submission.downs, submission.upvote_ratio, submission.num_comments)
+        return mention
 
     def __load_config(self):
         with open(config_path, "r", encoding="UTF-8") as config_file:
