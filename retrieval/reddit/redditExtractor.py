@@ -2,8 +2,8 @@ import json
 from praw.models import Subreddit
 from praw import Reddit
 
-from DataAnalysis_SS21.retrieval.Reddit.helper import print_attrs
-from retrieval.Reddit.stock_extraction import SymbolExtractor
+from DataAnalysis_SS21.retrieval.reddit.helper_methods import print_attrs
+from retrieval.reddit.symbolExtractor import SymbolExtractor
 
 config_path = "res/reddit_config.json"
 if __name__ == '__main__':
