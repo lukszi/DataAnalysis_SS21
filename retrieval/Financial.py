@@ -48,3 +48,6 @@ def plot_stock(stock_token: str, start: str, end: str):
 
 if __name__ == '__main__':
     print(is_stock_elevating('TSLA', "2021-02-01", 25))
+    print(is_stock_elevating('CLOV', "2021-02-01", 25))
+    print(is_stock_elevating('WSB', "2021-03-22", 5))
+
