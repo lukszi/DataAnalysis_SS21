@@ -11,3 +11,4 @@ class StockMention:
     stocks: list[str]
     posted: datetime
     votes_updated: datetime
+    votes: int
