@@ -36,13 +36,14 @@ class SymbolExtractor:
     def __create_search_tree(self):
         self.__searchTree = KeywordTree()
         tickers: np.array = self.__tickers.Ticker
-        for ticker in np.nditer(tickers):
-            self.__searchTree.add(ticker)
+        # FIXME
+        # for ticker in np.nditer(tickers):
+        #     self.__searchTree.add(ticker)
         self.__searchTree.finalize()
 
 
 def main():
-    extractor = SymbolExtractor("test.csv")
+    extractor = SymbolExtractor("ticker.csv")
     print(extractor.__tickers)
 
 

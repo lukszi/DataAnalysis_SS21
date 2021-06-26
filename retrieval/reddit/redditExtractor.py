@@ -40,3 +40,8 @@ class RedditExtractor:
                                user_agent="android:com.example.myredditapp:v1.2.4",
                                username=self.__config["username"])
         self.__wsb = self.__reddit.subreddit("WallStreetBets")
+
+
+if __name__ == '__main__':
+    extr = RedditExtractor()
+    extr.extract_last_n_posts(2)
