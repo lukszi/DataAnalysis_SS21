@@ -1,27 +1,42 @@
-import praw
 import json
+from praw.models import Subreddit
+from praw import Reddit
+
 from DataAnalysis_SS21.retrieval.Reddit.helper import print_attrs
-
-
-# Load config
-from DataAnalysis_SS21.retrieval.Reddit.stock_extraction import extract_symbols_from_submission
+from retrieval.Reddit.stock_extraction import SymbolExtractor
 
 config_path = "res/reddit_config.json"
 if __name__ == '__main__':
     config_path = "../../res/reddit_config.json"
 
-with open(config_path, "r", encoding="UTF-8") as config_file:
-    config = json.load(config_file)
 
+class RedditExtractor:
+    wsb: Subreddit
+    reddit: Reddit
+    symbol_extractor: SymbolExtractor
+    __config: dict[str, str]
 
-reddit = praw.Reddit(client_id=config["client_id"], client_secret=config["client_secret"],
-                     password=config["password"], user_agent="android:com.example.myredditapp:v1.2.4",
-                     username=config["username"])
+    def __init__(self):
+        self.load_config()
+        self.setup_reddit()
+        self.symbol_extractor = SymbolExtractor("ticker.csv")
 
-wsb = reddit.subreddit("WallStreetBets")
-wsb_new = wsb.new(limit=256)
-for submission in wsb_new:
-    print_attrs(submission, ["title", "score", "permalink", "url", "is_video", "is_meta" "is_self", "self_text"])
-    symbols = extract_symbols_from_submission(submission)
-    print(f"Symbols:\t{symbols}")
-    print("\n\n")
+    def extract_last_n_posts(self, n: int) -> None:
+        wsb_new = self.wsb.new(limit=n)
+        for submission in wsb_new:
+            print_attrs(submission,
+                        ["title", "score", "permalink", "url", "is_video", "is_meta" "is_self", "self_text"])
+            symbols = self.symbol_extractor.extract_symbols(submission)
+            print(f"Symbols:\t{symbols}")
+            print("\n\n")
+
+    def load_config(self):
+        with open(config_path, "r", encoding="UTF-8") as config_file:
+            self.__config = json.load(config_file)
+
+    def setup_reddit(self):
+        self.reddit = Reddit(client_id=self.__config["client_id"], client_secret=self.__config["client_secret"],
+                             password=self.__config["password"],
+                             user_agent="android:com.example.myredditapp:v1.2.4",
+                             username=self.__config["username"])
+        self.wsb = self.reddit.subreddit("WallStreetBets")
