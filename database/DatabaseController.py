@@ -5,27 +5,43 @@ from sqlalchemy.orm import sessionmaker
 from typing import List
 
 from database.RedditStocksTables import RedditPostsTable, StocksTable, DATABASE_NAME
-from storage import Model
+from storage.Model import StockMention
+
 
 class DatabaseController:
 
-    engine = create_engine(f'sqlite:///{DATABASE_NAME}')
-    Session = sessionmaker(engine)
+    def __init__(self):
+        """
+        Creates a engine and a Session with the Database
+        """
+        self.engine = create_engine(f'sqlite:///{DATABASE_NAME}')
+        self.Session = sessionmaker(self.engine)
 
-
-    def add_reddit_post(post_url: str, posted: datetime, votes_updated: datetime, stocks_token: List[str] = None):
+    def add_reddit_post_from_model(self, stock_mention: StockMention):
         """
         Adds a reddit post to the 'RedditStocks.db' database with all stocks mentioned.
-        :param post_url: reddit post url
-        :param posted: reddit post creation date
-        :param votes_updated: last time reddit votes got updated
-        :param stocks_token: a list of all stock tokens mentioned in the reddit post
+        :param stock_mention: Model with data to bne stored in Database
         """
-        conn = engine.connect()
-        with Session(bind=conn) as session:
+        post_url: str = stock_mention.post_url
+        stocks_token: List[str] = stock_mention.stocks
+        posted: datetime = stock_mention.posted
+        score_updated: datetime = stock_mention.score_updated
+        score: int = stock_mention.score
+        up_votes: int = stock_mention.up_votes
+        down_votes: int = stock_mention.down_votes
+        upvote_ratio: float = stock_mention.upvote_ratio
+        num_comments: int = stock_mention.num_comments
+
+        conn = self.engine.connect()
+        with self.Session(bind=conn) as session:
             reddit_post = RedditPostsTable(post_url=post_url,
                                            posted=posted,
-                                           votes_updated=votes_updated)
+                                           score_updated=score_updated,
+                                           score=score,
+                                           up_votes=up_votes,
+                                           down_votes=down_votes,
+                                           upvote_ratio=upvote_ratio,
+                                           num_comments=num_comments)
             if stocks_token is not None:
                 for token in stocks_token:
                     exists = session.query(session.query(StocksTable).filter_by(token=token).exists()).scalar()
@@ -36,14 +52,16 @@ class DatabaseController:
             session.commit()
 
 
-    def add_reddit_post_from_model(model: Model):
-        """
-        Adds a reddit post to the 'RedditStocks.db' database with all stocks mentioned.
-        :param model: Model with all data necessary to execute add_reddit_post with shared arguments
-        """
-        add_reddit_post(model.post_url, model.posted, model.votes_updated, model.stocks)
-
-
 if __name__ == '__main__':
-    stocks = ['ASD', 'PAD']
-    add_reddit_post('www.test.de', datetime.now(), datetime.now(), stocks)
+    stocks = ['TEST', 'HEY']
+    model = StockMention(post_url='www.test.de',
+                         stocks=stocks,
+                         posted=datetime.now(),
+                         score_updated=datetime.now(),
+                         score=2,
+                         up_votes=5,
+                         down_votes=3,
+                         upvote_ratio=0.6,
+                         num_comments=6)
+    dbc = DatabaseController()
+    dbc.add_reddit_post_from_model(model)
