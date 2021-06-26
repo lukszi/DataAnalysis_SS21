@@ -31,6 +31,9 @@ class StocksTable(Base):
 
 
 def create_database_if_not_exists():
+    """
+    Creates the database if not exists
+    """
     database = Path(DATABASE_NAME)
     if not database.is_file():
         engine = create_engine(f'sqlite:///{DATABASE_NAME}')
