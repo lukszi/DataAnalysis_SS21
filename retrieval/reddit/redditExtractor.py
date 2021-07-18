@@ -20,10 +20,10 @@ class RedditExtractor:
     __config: Dict[str, str]
     __last_retrieved_post: str
 
-    def __init__(self):
+    def __init__(self, symbol_extractor: SymbolExtractor):
         self.__load_config()
         self.__setup_reddit()
-        self.__symbol_extractor = SymbolExtractor("../../res/ticker.csv")
+        self.__symbol_extractor = symbol_extractor
 
     def extract_up_to_last_submission(self) -> List[StockMention]:
         """
