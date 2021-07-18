@@ -17,7 +17,7 @@ class DatabaseController:
         self.engine = create_engine(f'sqlite:///{DATABASE_NAME}')
         self.Session = sessionmaker(self.engine)
 
-    def add_reddit_post_from_model(self, stock_mention: StockMention):
+    def add_reddit_post_from_model(self, stock_mention: StockMention) -> None:
         """
         Adds a reddit post to the 'RedditStocks.db' database with all stocks mentioned.
         :param stock_mention: Model with data to bne stored in Database

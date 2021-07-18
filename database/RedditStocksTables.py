@@ -14,6 +14,9 @@ reddit_posts_stocks_association_table = Table('RedditPostsStocksAssociation', Ba
 
 
 class RedditPostsTable(Base):
+    """
+    Table with all reddit posts
+    """
     __tablename__ = 'reddit_posts'
 
     id = Column(Integer, primary_key=True)
@@ -30,12 +33,15 @@ class RedditPostsTable(Base):
 
 
 class StocksTable(Base):
+    """
+    Table with all stock tokens
+    """
     __tablename__ = 'stocks'
 
     token = Column(String(4), primary_key=True)
 
 
-def create_database_if_not_exists():
+def create_database_if_not_exists() -> None:
     """
     Creates the database if not exists
     """
