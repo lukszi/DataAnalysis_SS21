@@ -18,11 +18,23 @@ class RedditExtractor:
     __reddit: Reddit
     __symbol_extractor: SymbolExtractor
     __config: Dict[str, str]
+    __last_retrieved_post: str
 
     def __init__(self):
         self.__load_config()
         self.__setup_reddit()
         self.__symbol_extractor = SymbolExtractor("../../res/ticker.csv")
+
+    def extract_up_to_last_submission(self) -> List[StockMention]:
+        """
+        Extracts a list of StockMentions from the newest submissions on reddit up to the last submission that has ben
+        parsed already
+
+        :return: List of all stockMentions found
+        """
+        wsb_new: Iterator[Submission] = self.__wsb.new()
+        mentions_found: List[StockMention] = self.__extract_from_submissions(wsb_new, stop_at_last_submission=True)
+        return mentions_found
 
     def extract_last_n_submissions(self, n: int) -> List[StockMention]:
         """
@@ -30,21 +42,35 @@ class RedditExtractor:
         :param n: number of submissions to be evaluated
         :return: List of all stockMentions found in the n last submissions
         """
-        wsb_new = self.__wsb.new(limit=n)
+        wsb_new: Iterator[Submission] = self.__wsb.new(limit=n)
         return self.__extract_from_submissions(wsb_new)
 
-    def __extract_from_submissions(self, submissions: Iterator[Submission]) -> List[StockMention]:
+    def __extract_from_submissions(self, submissions: Iterator[Submission], stop_at_last_submission: bool = False) -> \
+            List[StockMention]:
         """
         From an Iterator over submissions extracts all stocks mentioned
 
         :param submissions: Submissions to be evaluated
         :return: List of stockMentions that can be saved into the database
         """
+
+        # TODO: Logic to stop if I get an unlimited generator
         parsed_posts: List[StockMention] = []
+        first_submission: Optional[str] = None
+
         for submission in submissions:
+            # Logic to continue from last parsed submission
+            if first_submission is None:
+                first_submission = submission.url
+            if stop_at_last_submission and self.__last_retrieved_post is not None:
+                if submission.url == self.__last_retrieved_post:
+                    break
+
             mention = self.__extract_from_submission(submission)
             if mention is not None:
                 parsed_posts.append(mention)
+
+        self.__last_retrieved_post = first_submission
         return parsed_posts
 
     def __extract_from_submission(self, submission: Submission) -> Optional[StockMention]:
