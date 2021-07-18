@@ -23,9 +23,8 @@ def is_stock_elevating(stock_token: str, start: str, time_delta_in_days: int) ->
     end = '-'.join(date_parts)
 
     dataframe = ticker.history(start=start, end=end, interval='1h')
-    m, b = calculate_best_fitting_line(dataframe)
-    # plot_dataframe(dataframe)
-    print(m, b)
+    m, b = calculate_best_fitting_line(range(dataframe.shape[0]), dataframe['Close'].values)
+    print(f'm={m} , b={b}')
     if m > 0:
         return True
     return False
@@ -113,9 +112,8 @@ def plot_stock(stock_token: str, start: str, end: str) -> None:
 
 
 if __name__ == '__main__':
-    # print(is_stock_elevating('TSLA', "2021-02-01", 25))
-    # print(is_stock_elevating('CLOV', "2021-02-01", 25))
-    # print(is_stock_elevating('WSB', "2021-03-22", 5))
+    print(is_stock_elevating('TSLA', "2021-02-01", 25))
+    print(is_stock_elevating('CLOV', "2021-02-01", 25))
 
-    stocks_slope = average_slopes_of_stock('TSLA', "2021-02-01", 8, plot_data=True)
+    stocks_slope = average_slopes_of_stock('TSLA', "2021-02-01", 8, plot_data=False)
     print(stocks_slope)
