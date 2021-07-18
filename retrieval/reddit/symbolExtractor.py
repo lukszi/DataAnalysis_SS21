@@ -33,6 +33,7 @@ class SymbolExtractor:
         """
         symbols: List[str] = self.__extract_symbols_from_title(submission)
         symbols += self.__extract_symbols_from_self_text(submission)
+        symbols = self.__remove_duplicates(symbols)
         return symbols
 
     def __extract_symbols_from_title(self, submission: Submission) -> List[str]:
@@ -77,6 +78,10 @@ class SymbolExtractor:
         for ticker in tickers:
             self.__searchTree.add(ticker)
         self.__searchTree.finalize()
+
+    @staticmethod
+    def __remove_duplicates(symbols: List[str]):
+        return list(set(symbols))
 
 
 def main():
