@@ -23,7 +23,7 @@ class RedditExtractor:
     def __init__(self):
         self.__load_config()
         self.__setup_reddit()
-        self.__symbol_extractor = SymbolExtractor("ticker.csv")
+        self.__symbol_extractor = SymbolExtractor("../../res/ticker.csv")
 
     def extract_last_n_submissions(self, n: int) -> List[StockMention]:
         """

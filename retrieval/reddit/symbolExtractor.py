@@ -78,7 +78,7 @@ class SymbolExtractor:
 
 
 def main():
-    extractor = SymbolExtractor("ticker.csv")
+    extractor = SymbolExtractor("../../res/ticker.csv")
     print(extractor.__tickers)
 
 
