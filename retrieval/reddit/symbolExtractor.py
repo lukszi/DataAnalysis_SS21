@@ -1,3 +1,5 @@
+from typing import List
+
 import pandas as pd
 from ahocorapy.keywordtree import KeywordTree
 from pandas import DataFrame, Series
@@ -22,18 +24,18 @@ class SymbolExtractor:
         self.__tickers = pd.read_csv(ticker_file, sep="\t")
         self.__create_search_tree()
 
-    def extract_symbols(self, submission: Submission) -> list[str]:
+    def extract_symbols(self, submission: Submission) -> List[str]:
         """
         Extracts stock symbols from all text contained in a submission
 
         :param submission: to be searched
         :return: list of all found tickers
         """
-        symbols: list[str] = self.__extract_symbols_from_title(submission)
+        symbols: List[str] = self.__extract_symbols_from_title(submission)
         symbols += self.__extract_symbols_from_self_text(submission)
         return symbols
 
-    def __extract_symbols_from_title(self, submission: Submission) -> list[str]:
+    def __extract_symbols_from_title(self, submission: Submission) -> List[str]:
         """
         Extracts symbols from the title of a submission
 
@@ -43,7 +45,7 @@ class SymbolExtractor:
         title = submission.title
         return self.find_symbols_in_text(title)
 
-    def __extract_symbols_from_self_text(self, submission: Submission) -> list[str]:
+    def __extract_symbols_from_self_text(self, submission: Submission) -> List[str]:
         """
         Extracts symbols from the text of a submission
 
@@ -55,7 +57,7 @@ class SymbolExtractor:
             return self.find_symbols_in_text(text)
         return []
 
-    def find_symbols_in_text(self, text: str) -> list[str]:
+    def find_symbols_in_text(self, text: str) -> List[str]:
         """
         Extracts symbols from a text
 
