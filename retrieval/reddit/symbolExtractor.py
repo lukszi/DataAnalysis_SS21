@@ -8,7 +8,7 @@ from praw.models import Submission
 
 class SymbolExtractor:
     """
-    Takes a Reddit submission and extracts all mentioned tickers
+    Takes a reddit submission and extracts all mentioned tickers
     Utilizes the aho corasick algorithm known from antivirus software
     """
 
