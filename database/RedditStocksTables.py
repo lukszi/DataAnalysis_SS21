@@ -6,39 +6,15 @@ from pathlib import Path
 Base = declarative_base()
 
 DATABASE_NAME = '../res/RedditStocks.db'
-
-reddit_posts_stocks_association_table = Table('RedditPostsStocksAssociation', Base.metadata,
-                                              Column('reddit_posts_id', Integer, ForeignKey('reddit_posts.id')),
-                                              Column('stocks_token', String, ForeignKey('stocks.token'))
-                                              )
-
-
-class RedditPostsTable(Base):
-    """
-    Table with all reddit submissions
-    """
-    __tablename__ = 'reddit_posts'
-
-    id = Column(Integer, primary_key=True)
-    post_url = Column(String)
-    posted = Column(DATETIME)
-    score_updated = Column(DATETIME)
-    score = Column(Integer)
-    up_votes = Column(Integer)
-    down_votes = Column(Integer)
-    upvote_ratio = Column(Float)
-    num_comments = Column(Integer)
-    stocks = relationship("StocksTable",
-                          secondary=reddit_posts_stocks_association_table)
-
-
-class StocksTable(Base):
-    """
-    Table with all stock tokens
-    """
-    __tablename__ = 'stocks'
-
-    token = Column(String(4), primary_key=True)
+#
+#
+# class StocksTable(Base):
+#     """
+#     Table with all stock tokens
+#     """
+#     __tablename__ = 'stocks'
+#
+#     token = Column(String(4), primary_key=True)
 
 
 def create_database_if_not_exists() -> None:
