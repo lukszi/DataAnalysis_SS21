@@ -1,11 +1,10 @@
 import json
 from datetime import datetime
-from typing import List, Iterator, Optional
+from typing import List, Iterator, Optional, Dict
 
 from praw.models import Subreddit, Submission
 from praw import Reddit
 
-from DataAnalysis_SS21.retrieval.reddit.helper_methods import print_attrs
 from retrieval.reddit.symbolExtractor import SymbolExtractor
 from storage.Model import StockMention
 
@@ -18,7 +17,7 @@ class RedditExtractor:
     __wsb: Subreddit
     __reddit: Reddit
     __symbol_extractor: SymbolExtractor
-    __config: dict[str, str]
+    __config: Dict[str, str]
 
     def __init__(self):
         self.__load_config()
