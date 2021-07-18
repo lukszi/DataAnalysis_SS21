@@ -54,7 +54,7 @@ class RedditExtractor:
         :return: List of stockMentions that can be saved into the database
         """
 
-        # TODO: Logic to stop if I get an unlimited generator
+        # TODO: Logic to stop if I get an infinite iterator
         parsed_posts: List[StockMention] = []
         first_submission: Optional[str] = None
 
