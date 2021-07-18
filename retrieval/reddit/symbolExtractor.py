@@ -81,7 +81,7 @@ class SymbolExtractor:
 
 def main():
     extractor = SymbolExtractor("../../res/ticker.csv")
-    print(extractor.__tickers)
+    print(extractor.__getattribute__("_SymbolExtractor__tickers"))
 
 
 if __name__ == '__main__':
