@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from typing import List
+from typing import List, Iterator, Optional
 
 from praw.models import Subreddit, Submission
 from praw import Reddit
@@ -25,20 +25,43 @@ class RedditExtractor:
         self.__setup_reddit()
         self.__symbol_extractor = SymbolExtractor("ticker.csv")
 
-    def extract_last_n_posts(self, n: int) -> List[StockMention]:
-        parsed_posts: List[StockMention] = []
+    def extract_last_n_submissions(self, n: int) -> List[StockMention]:
+        """
+        Extracts a list of StockMentions from the n newest submissions on reddit
+        :param n: number of submissions to be evaluated
+        :return: List of all stockMentions found in the n last submissions
+        """
         wsb_new = self.__wsb.new(limit=n)
-        for submission in wsb_new:
-            tickers_in_submission = self.__symbol_extractor.extract_symbols(submission)
-            if len(tickers_in_submission) == 0:
-                continue
+        return self.__extract_from_submissions(wsb_new)
 
-            mention = self.__create_model(submission, tickers_in_submission)
-            parsed_posts.append(mention)
+    def __extract_from_submissions(self, submissions: Iterator[Submission]) -> List[StockMention]:
+        """
+        From an Iterator over submissions extracts all stocks mentioned
+
+        :param submissions: Submissions to be evaluated
+        :return: List of stockMentions that can be saved into the database
+        """
+        parsed_posts: List[StockMention] = []
+        for submission in submissions:
+            mention = self.__extract_from_submission(submission)
+            if mention is not None:
+                parsed_posts.append(mention)
         return parsed_posts
 
+    def __extract_from_submission(self, submission: Submission) -> Optional[StockMention]:
+        """
+        Extracts a stockMention from a single submission
+
+        :param submission: Submission to be evaluated
+        :return: None if no tickers were found, otherwise a stockMention object is returned
+        """
+        tickers_in_submission = self.__symbol_extractor.extract_symbols(submission)
+        if len(tickers_in_submission) == 0:
+            return None
+        return self.__create_model_object(submission, tickers_in_submission)
+
     @staticmethod
-    def __create_model(submission: Submission, tickers_in_submission: List[str]) -> StockMention:
+    def __create_model_object(submission: Submission, tickers_in_submission: List[str]) -> StockMention:
         posted = datetime.fromtimestamp(submission.created_utc)
         mention = StockMention(submission.url, tickers_in_submission, posted, datetime.now(), submission.score,
                                submission.ups, submission.downs, submission.upvote_ratio, submission.num_comments)
@@ -58,5 +81,5 @@ class RedditExtractor:
 
 if __name__ == '__main__':
     extractor = RedditExtractor()
-    results = extractor.extract_last_n_posts(2)
+    results = extractor.extract_last_n_submissions(2)
     print(results)

@@ -15,7 +15,7 @@ reddit_posts_stocks_association_table = Table('RedditPostsStocksAssociation', Ba
 
 class RedditPostsTable(Base):
     """
-    Table with all reddit posts
+    Table with all reddit submissions
     """
     __tablename__ = 'reddit_posts'
 
