@@ -4,20 +4,18 @@ from datetime import datetime
 from sqlalchemy.orm import sessionmaker
 from typing import List
 
-from database.RedditStocksTables import RedditPostsTable, StocksTable, DATABASE_NAME
+from database.RedditStocksTables import RedditPostsTable, StocksTable, DATABASE_NAME, create_database_if_not_exists
 from storage.Model import StockMention
 
 
 class DatabaseController:
 
-    def __init__(self, database_path: str = None):
+    def __init__(self, database_path: str = DATABASE_NAME):
         """
         Creates a engine and a Session with the Database
         """
-        if database_path:
-            self.engine = create_engine(f'sqlite:///{database_path}')
-        else:
-            self.engine = create_engine(f'sqlite:///{DATABASE_NAME}')
+        create_database_if_not_exists()
+        self.engine = create_engine(f'sqlite:///{database_path}')
         self.Session = sessionmaker(self.engine)
 
     def add_reddit_post_from_model(self, stock_mention: StockMention) -> None:
