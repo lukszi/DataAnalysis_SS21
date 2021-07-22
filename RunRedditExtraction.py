@@ -12,10 +12,16 @@ def extract_and_safe_reddit_posts_in_database(last_n_submissions: int) -> None:
     symbol_extractor = SymbolExtractor("res/ticker.csv")
     extractor = RedditExtractor(symbol_extractor)
     database_controller = DatabaseController("res/RedditStocks.db")
-
+    import time
+    start_time = time.time()
     results = extractor.extract_last_n_submissions(last_n_submissions)
+    print(time.time()-start_time)
     for result in results:
-        database_controller.add_reddit_post_from_model(result)
+        try:
+            database_controller.add_stock_mention_to_database(result)
+        except:
+            continue
+    print(time.time() - start_time)
 
 
-extract_and_safe_reddit_posts_in_database(10)
+extract_and_safe_reddit_posts_in_database(25000)

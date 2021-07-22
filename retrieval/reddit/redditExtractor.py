@@ -6,7 +6,7 @@ from praw.models import Subreddit, Submission
 from praw import Reddit
 
 from retrieval.reddit.symbolExtractor import SymbolExtractor
-from database.Model import StockMention
+from database.Model.StockMention import StockMention, Stocks
 
 config_path = "res/reddit_config.json"
 if __name__ == '__main__':
@@ -88,8 +88,15 @@ class RedditExtractor:
     @staticmethod
     def __create_model_object(submission: Submission, tickers_in_submission: List[str]) -> StockMention:
         posted = datetime.fromtimestamp(submission.created_utc)
-        mention = StockMention(submission.url, tickers_in_submission, posted, datetime.now(), submission.score,
-                               submission.ups, submission.downs, submission.upvote_ratio, submission.num_comments)
+        mention = StockMention(post_url=submission.url,
+                               score_updated=datetime.now(),
+                               score=submission.score,
+                               up_votes=submission.ups,
+                               down_votes=submission.downs,
+                               upvote_ratio=submission.upvote_ratio,
+                               num_comments=submission.num_comments,
+                               posted=posted,
+                               stocks=tickers_in_submission)
         return mention
 
     def __load_config(self):

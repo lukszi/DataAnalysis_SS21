@@ -30,28 +30,29 @@ def is_stock_elevating(stock_token: str, start: str, time_delta_in_days: int) ->
     return False
 
 
-def average_slopes_of_stock(stock_token: str, start: str, max_days: int = 10, plot_data: bool = False) -> List[int]:
+def average_slopes_of_stock(stock_token: str, start_datetime: datetime, max_days: int = 10, plot_data: bool = False) -> \
+        List[int]:
     """
     List of average slopes of the stock from the start in 1 to max_days-1 days intervals
+    :param start_datetime: start datetime
     :param plot_data: True if the data and best fitting line should be ploted
     :param stock_token: the specific stock token
-    :param start: start date in format "YYYY-MM-DD"
     :param max_days: how many days after start you want to have the average slopes
     :return: List of average slopes
     """
     ticker = yf.Ticker(stock_token)
     # calculate start and end date
-    start_datetime = datetime.fromisoformat(start)
     timedelta_max_days = timedelta(days=max_days)
     end_datetime = start_datetime + timedelta_max_days
+    start = start_datetime.strftime('%Y-%m-%d')
     end = end_datetime.strftime('%Y-%m-%d')
     # get tickers history
     dataframe = ticker.history(start=start, end=end, interval='1h')
     close = dataframe['Close'].values
     # calculate best fitting line from start in interval_day steps
     elevations = []
-    for interval_day in range(1, max_days-1):
-        number_of_entries = int(interval_day*NUMBER_OF_ENTRIES_A_DAY)
+    for interval_day in range(1, max_days - 1):
+        number_of_entries = int(interval_day * NUMBER_OF_ENTRIES_A_DAY)
         interval_close = close[0:number_of_entries]
         m, b = calculate_best_fitting_line(range(number_of_entries), interval_close, plot_data)
         elevations.append(m)
@@ -61,7 +62,9 @@ def average_slopes_of_stock(stock_token: str, start: str, max_days: int = 10, pl
 def calculate_best_fitting_line(x, y, plot_data: bool = False) -> (int, int):
     """
     Calculates the best fitting line of points in dataframe
-    :param dataframe: dataframe with points
+    :param y: Y-Coordinates
+    :param x: X-Coordinates
+    :param plot_data: whether the data and line should be plotted (default = False)
     :return: Gradient and y axis intercept
     """
     # y = dataframe['Close']
@@ -114,6 +117,6 @@ def plot_stock(stock_token: str, start: str, end: str) -> None:
 if __name__ == '__main__':
     print(is_stock_elevating('TSLA', "2021-02-01", 25))
     print(is_stock_elevating('CLOV', "2021-02-01", 25))
-
-    stocks_slope = average_slopes_of_stock('TSLA', "2021-02-01", 8, plot_data=False)
+    start_datetime = datetime.fromisoformat("2021-02-01")
+    stocks_slope = average_slopes_of_stock('TSLA', start_datetime, 8, plot_data=True)
     print(stocks_slope)
