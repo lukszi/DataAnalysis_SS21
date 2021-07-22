@@ -1,8 +1,11 @@
 from datetime import datetime, timedelta
+from typing import List
 
 import yfinance as yf
 import matplotlib.pyplot as plt
 import numpy as np
+
+NUMBER_OF_ENTRIES_A_DAY = 7
 
 
 def is_stock_elevating(stock_token: str, start: str, time_delta_in_days: int) -> bool:
@@ -20,36 +23,52 @@ def is_stock_elevating(stock_token: str, start: str, time_delta_in_days: int) ->
     end = '-'.join(date_parts)
 
     dataframe = ticker.history(start=start, end=end, interval='1h')
-    m, b = calculate_best_fitting_line(dataframe)
-    # plot_dataframe(dataframe)
-    print(m, b)
+    m, b = calculate_best_fitting_line(range(dataframe.shape[0]), dataframe['Close'].values)
+    print(f'm={m} , b={b}')
     if m > 0:
         return True
     return False
 
 
-def how_many_days_after_stock_elevates(stock_token: str, start: str, max_days: int = 10) -> int:
+def average_slopes_of_stock(stock_token: str, start: str, max_days: int = 10, plot_data: bool = False) -> List[int]:
+    """
+    List of average slopes of the stock from the start in 1 to max_days-1 days intervals
+    :param plot_data: True if the data and best fitting line should be ploted
+    :param stock_token: the specific stock token
+    :param start: start date in format "YYYY-MM-DD"
+    :param max_days: how many days after start you want to have the average slopes
+    :return: List of average slopes
+    """
     ticker = yf.Ticker(stock_token)
-
+    # calculate start and end date
     start_datetime = datetime.fromisoformat(start)
     timedelta_max_days = timedelta(days=max_days)
     end_datetime = start_datetime + timedelta_max_days
     end = end_datetime.strftime('%Y-%m-%d')
+    # get tickers history
     dataframe = ticker.history(start=start, end=end, interval='1h')
-    print(dataframe)
+    close = dataframe['Close'].values
+    # calculate best fitting line from start in interval_day steps
+    elevations = []
+    for interval_day in range(1, max_days-1):
+        number_of_entries = int(interval_day*NUMBER_OF_ENTRIES_A_DAY)
+        interval_close = close[0:number_of_entries]
+        m, b = calculate_best_fitting_line(range(number_of_entries), interval_close, plot_data)
+        elevations.append(m)
+    return elevations
 
 
-
-def calculate_best_fitting_line(dataframe) -> (int, int):
+def calculate_best_fitting_line(x, y, plot_data: bool = False) -> (int, int):
     """
     Calculates the best fitting line of points in dataframe
     :param dataframe: dataframe with points
     :return: Gradient and y axis intercept
     """
-    y = dataframe['Close']
-    x = range(dataframe.shape[0])
+    # y = dataframe['Close']
+    # x = range(dataframe.shape[0])
     m, b = np.polyfit(x, y, 1)
-    plot_line_with_data_points(x, y, m, b)
+    if plot_data:
+        plot_line_with_data_points(x, y, m, b)
     return m, b
 
 
@@ -93,9 +112,8 @@ def plot_stock(stock_token: str, start: str, end: str) -> None:
 
 
 if __name__ == '__main__':
-    # print(is_stock_elevating('TSLA', "2021-02-01", 25))
-    # print(is_stock_elevating('CLOV', "2021-02-01", 25))
-    # print(is_stock_elevating('WSB', "2021-03-22", 5))
+    print(is_stock_elevating('TSLA', "2021-02-01", 25))
+    print(is_stock_elevating('CLOV', "2021-02-01", 25))
 
-    how_many_days_after_stock_elevates('TSLA', "2021-02-01", 20)
-
+    stocks_slope = average_slopes_of_stock('TSLA', "2021-02-01", 8, plot_data=False)
+    print(stocks_slope)
