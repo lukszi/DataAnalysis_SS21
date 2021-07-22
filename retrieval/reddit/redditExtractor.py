@@ -6,7 +6,7 @@ from praw.models import Subreddit, Submission
 from praw import Reddit
 
 from retrieval.reddit.symbolExtractor import SymbolExtractor
-from storage.Model import StockMention
+from database.Model import StockMention
 
 config_path = "res/reddit_config.json"
 if __name__ == '__main__':

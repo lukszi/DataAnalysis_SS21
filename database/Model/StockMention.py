@@ -4,11 +4,8 @@ from datetime import datetime
 from dataclasses_json import dataclass_json
 from typing import List
 from sqlalchemy import *
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from pathlib import Path
 
-from database.RedditStocksTables import Base
+from database.Model import Base
 
 
 @dataclass_json
