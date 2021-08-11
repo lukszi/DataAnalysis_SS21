@@ -1,8 +1,8 @@
-praw~=7.3.0
+praw~=7.4.0
 yfinance~=0.1.59
 matplotlib~=3.4.2
 dataclasses-json~=0.5.4
 ahocorapy~=1.6.1
-pandas~=1.3.0
+pandas~=1.3.1
 SQLAlchemy~=1.4.19
 numpy~=1.21.0
