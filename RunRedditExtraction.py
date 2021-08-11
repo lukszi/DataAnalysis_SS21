@@ -1,6 +1,8 @@
 import time
 from typing import Optional
 
+from sqlalchemy.exc import IntegrityError
+
 from retrieval.reddit.redditExtractor import RedditExtractor
 from database.DatabaseController import DatabaseController
 from retrieval.reddit.symbolExtractor import SymbolExtractor
@@ -49,9 +51,15 @@ def safe_reddit_posts_in_database(results):
     :return:
     """
     interrupt: Optional[InterruptedError] = None
+    num_inserted = 0
+    num_insertion_failed = 0
     for result in results:
         try:
             database_controller.add_stock_mention_to_database(result)
+            num_inserted += 1
+        except IntegrityError:
+            num_insertion_failed += 1
+            continue
         except Exception as e:
             print(e)
             continue
@@ -60,9 +68,10 @@ def safe_reddit_posts_in_database(results):
             print("Got interrupt order, finish persisting extracted data")
             continue
 
+    print(f"{datetime.now()}: inserted/failed: {num_inserted}/{num_insertion_failed}")
     # Pass on interrupt exception
     if interrupt is not None:
         raise interrupt
 
 
-extract_and_safe_reddit_posts_in_database(100)
+extract_and_safe_reddit_posts_in_database(250)
