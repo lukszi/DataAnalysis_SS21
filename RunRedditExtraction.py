@@ -1,6 +1,7 @@
 import time
 from typing import Optional
 
+from prawcore import ServerError
 from sqlalchemy.exc import IntegrityError
 
 from retrieval.reddit.redditExtractor import RedditExtractor
@@ -41,6 +42,9 @@ def extract_and_safe_reddit_posts_in_database(last_n_submissions: int) -> None:
         except InterruptedError:
             print(f"{datetime.now()}: Stopping extraction")
             break
+        except ServerError as e:
+            print(e)
+
     print(f"{datetime.now()}: finished extracting {extracted_items} mentions in {loops_ran} cycles")
 
 
@@ -59,14 +63,11 @@ def safe_reddit_posts_in_database(results):
             num_inserted += 1
         except IntegrityError:
             num_insertion_failed += 1
-            continue
         except Exception as e:
             print(e)
-            continue
         except InterruptedError as e:
             interrupt = e
             print("Got interrupt order, finish persisting extracted data")
-            continue
 
     print(f"{datetime.now()}: inserted/failed: {num_inserted}/{num_insertion_failed}")
     # Pass on interrupt exception
