@@ -58,15 +58,16 @@ class RedditExtractor:
         parsed_posts: List[StockMention] = []
         first_submission: Optional[str] = None
 
-        for submission in submissions:
+        for i, submission in enumerate(submissions):
             # Logic to continue from last parsed submission
             if first_submission is None:
                 first_submission = submission.url
+            # print(i, submission.title)
             if stop_at_last_submission and self.__last_retrieved_post is not None:
+                # print("got last submission")
                 if submission.url == self.__last_retrieved_post:
                     break
-
-            self.__submission_is_parsable(submission)
+            # self.__submission_is_parsable(submission)
             mention = self.__extract_from_submission(submission)
             if mention is not None:
                 parsed_posts.append(mention)
