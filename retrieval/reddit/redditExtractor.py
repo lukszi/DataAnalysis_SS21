@@ -6,7 +6,7 @@ from praw.models import Subreddit, Submission
 from praw import Reddit
 
 from retrieval.reddit.symbolExtractor import SymbolExtractor
-from database.Model.StockMention import StockMention, Stocks
+from database.Model.StockMention import StockMention
 
 config_path = "res/reddit_config.json"
 if __name__ == '__main__':
@@ -66,6 +66,7 @@ class RedditExtractor:
                 if submission.url == self.__last_retrieved_post:
                     break
 
+            self.__submission_is_parsable(submission)
             mention = self.__extract_from_submission(submission)
             if mention is not None:
                 parsed_posts.append(mention)
@@ -109,6 +110,9 @@ class RedditExtractor:
                                user_agent="android:com.example.myredditapp:v1.2.4",
                                username=self.__config["username"])
         self.__wsb = self.__reddit.subreddit("WallStreetBets")
+
+    def __submission_is_parsable(self, submission):
+        return submission.is_self
 
 
 if __name__ == '__main__':
