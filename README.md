@@ -1,4 +1,4 @@
-This repository is the DataAnalysis project by Lukas (3217694), Benno (Add matrNr) and Marco (Add matrNr)
+This repository is the DataAnalysis project by Lukas (3217694), Benno (3254806) and Marco (Add matrNr)
 
 The goal of this project is to extract mentions of stocksymbols from reddits wallstreetbets, and then search for 
 correlations in mention spikes and stock price shifts.
