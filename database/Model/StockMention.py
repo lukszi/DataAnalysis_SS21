@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
+import numpy as np
 
 from dataclasses_json import dataclass_json
 from typing import List
@@ -7,6 +8,8 @@ from sqlalchemy import *
 from sqlalchemy.orm import relationship
 
 from database.Model import Base
+
+NUMBER_OF_STOCK_INFORMATION = 6
 
 
 @dataclass_json
@@ -41,6 +44,9 @@ class StockMention(Base):
         for stock in stocks:
             stock_col = Stocks(stock)
             self.stocks.append(stock_col)
+
+    def get_array_of_all_analysable_data(self):
+        return np.array([self.score, self.up_votes, self.down_votes, self.upvote_ratio, self.num_comments])
 
 
 class Stocks(Base):

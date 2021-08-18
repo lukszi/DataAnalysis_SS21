@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from typing import List
 
 import yfinance as yf
 import matplotlib.pyplot as plt
@@ -31,7 +30,7 @@ def is_stock_elevating(stock_token: str, start: str, time_delta_in_days: int) ->
 
 
 def average_slopes_of_stock(stock_token: str, start_datetime: datetime, max_days: int = 10, plot_data: bool = False) -> \
-        List[int]:
+        np.ndarray or None:
     """
     List of average slopes of the stock from the start in 1 to max_days-1 days intervals
     :param start_datetime: start datetime
@@ -49,14 +48,22 @@ def average_slopes_of_stock(stock_token: str, start_datetime: datetime, max_days
     # get tickers history
     dataframe = ticker.history(start=start, end=end, interval='1h')
     close = dataframe['Close'].values
-    # calculate best fitting line from start in interval_day steps
-    elevations = []
-    for interval_day in range(1, max_days - 1):
-        number_of_entries = int(interval_day * NUMBER_OF_ENTRIES_A_DAY)
-        interval_close = close[0:number_of_entries]
-        m, b = calculate_best_fitting_line(range(number_of_entries), interval_close, plot_data)
-        elevations.append(m)
-    return elevations
+    if len(close) > 0:
+        # calculate best fitting line from start in interval_day steps
+        elevations = np.zeros(17)
+        i = 0
+        for interval_day in range(1, max_days - 1):
+            number_of_entries = int(interval_day * NUMBER_OF_ENTRIES_A_DAY)
+            interval_close = close[0:number_of_entries]
+            if i <= 16:
+                m, b = calculate_best_fitting_line(range(len(interval_close)), interval_close, plot_data)
+                if np.isnan(m):
+                    return None
+                elevations[i] = m
+            i += 1
+        if elevations[0] != np.nan:
+            return elevations
+    return None
 
 
 def calculate_best_fitting_line(x, y, plot_data: bool = False) -> (int, int):
@@ -69,7 +76,10 @@ def calculate_best_fitting_line(x, y, plot_data: bool = False) -> (int, int):
     """
     # y = dataframe['Close']
     # x = range(dataframe.shape[0])
-    m, b = np.polyfit(x, y, 1)
+    try:
+        m, b = np.polyfit(x, y, 1)
+    except:
+        return 0, 0
     if plot_data:
         plot_line_with_data_points(x, y, m, b)
     return m, b
