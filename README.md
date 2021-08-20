@@ -5,7 +5,8 @@ This repository is the DataAnalysis project by Lukas (3217694), Benno (3254806) 
 The goal of this project is to extract mentions of stocksymbols from reddits wallstreetbets, and then search for 
 correlations in mention spikes and stock price shifts.
 
-Further information relevant specifically to the lecturer can be found in the [asignment_doc](assignment_doc/introduction.md) folder
+## Documentation
+The required documentation can be found in the [asignment_doc](assignment_doc/introduction.md) folder
 
 ## Setup
 ### Python
