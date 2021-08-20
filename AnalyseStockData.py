@@ -50,7 +50,7 @@ def calculate_covarianz_for_lineare_correlations(stockdata):
     """
     values = np.delete(stockdata, 0, axis=1)
     cov = np.corrcoef(values.T.astype(float))
-    pd.DataFrame(cov).to_csv("res/Grafics/Covarianz.csv", delimiter='|')
+    pd.DataFrame(cov).to_csv("res/Grafics/Covarianz.csv", sep=";")
 
 
 def plot_upvote_ratio_against_average_slope(stockdata):
@@ -59,15 +59,15 @@ def plot_upvote_ratio_against_average_slope(stockdata):
     :param stockdata: on which to plot the results
     """
     x = stockdata[:, 3]
-    for y_index in range(5, stockdata.shape[1]):
+    for y_index in range(4, stockdata.shape[1]):
         y = stockdata[:, y_index]
         plt.scatter(x, y)
         plt.xlabel("Up-Vote Ratio")
-        plt.ylabel(f"Average slope after {y_index-5} days")
+        plt.ylabel(f"Average slope after {y_index - 5} days")
         plt.figtext(.1, .9, f"Mean of Up-Vote Ratio : {x.mean()}\n")
-        plt.figtext(.1, .9, f"Mean of Average Slope after {y_index-5} days : {y.mean()}")
+        plt.figtext(.1, .9, f"Mean of Average Slope after {y_index - 5} days : {y.mean()}")
         plt.axis((0, 1, -1, 1))
-        plt.savefig(f'res/Grafics/UpVoteRatioWithAverageSlopeAfter{y_index-5}Days.png')
+        plt.savefig(f'res/Grafics/UpVoteRatioWithAverageSlopeAfter{y_index - 5}Days.png')
         plt.show()
 
 
@@ -77,7 +77,7 @@ def plot_num_of_likes_against_average_slope(stockdata):
     :param stockdata: on which to plot the results
     """
     x = stockdata[:, 1]
-    for y_index in range(5, stockdata.shape[1]):
+    for y_index in range(4, stockdata.shape[1]):
         y = stockdata[:, y_index]
         plt.scatter(x, y)
         plt.xlabel("Number of Up-votes")
@@ -95,7 +95,7 @@ def plot_num_of_comments_against_average_slope(stockdata):
     :param stockdata: on which to plot the results
     """
     x = stockdata[:, 4]
-    for y_index in range(5, stockdata.shape[1]):
+    for y_index in range(4, stockdata.shape[1]):
         y = stockdata[:, y_index]
         plt.scatter(x, y)
         plt.xlabel("Number of comments")

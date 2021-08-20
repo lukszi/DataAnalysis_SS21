@@ -9,7 +9,7 @@ from sqlalchemy.orm import relationship
 
 from database.Model import Base
 
-NUMBER_OF_STOCK_INFORMATION = 6
+NUMBER_OF_STOCK_INFORMATION = 4
 
 
 @dataclass_json
@@ -46,7 +46,7 @@ class StockMention(Base):
             self.stocks.append(stock_col)
 
     def get_array_of_all_analysable_data(self):
-        return np.array([self.score, self.up_votes, self.down_votes, self.upvote_ratio, self.num_comments])
+        return np.array([self.score, self.up_votes, self.upvote_ratio, self.num_comments])
 
 
 class Stocks(Base):
