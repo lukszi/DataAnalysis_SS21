@@ -4,7 +4,7 @@ The source files relevant to this discussion can be found [here](../../retrieval
 
 ## Scope
 The Reddit extractor solves two problems:
-* extraction of all relevant posts from reddit 
+* extracting relevant posts from the WallStreetBets subreddit 
 * Search for relevant stocks in the extracted posts 
 
 ## Implementation

@@ -1,4 +1,4 @@
-# WallstreetBets DataAnalysis project
+# WallStreetBets DataAnalysis project
 
 This repository is the DataAnalysis project by Lukas (3217694), Benno (3254806) and Marco (Add matrNr)
 
