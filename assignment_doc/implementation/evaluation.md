@@ -4,23 +4,22 @@ The source files relevant to this discussion can be found [here](../../AnalyseSt
 
 ## Scope
 
-The Evaluation collects all the data to find correlation between all features
-and also plot connections of some features.
+The Evaluation uses the collected reddit data and data from yahoo finance to calculate covariances and plots some of the results.
 
 ## Implementation
 
-First the function extracts all Reddit posts out of the database.   
-Then it runs over these and collects the average slopes of the posts in a 
-specific time period since the post was published. 
-It saves all the analysable information in a numpy matrix where it later on
-calculates the Covarianz matrix between all the features.   
-After finishing the program a CSV file with the matrix can be found at [here](../../res/Grafics/Covarianz.csv).  
-The features are Structured as followed:
+In the first step, all reddit posts are loaded from the database.   
+Next for each stock mentioned in the reddit posts, the average slope of mentions is calculated.  
+The resulting information together with the datapoints from the database are saved in a numpy array
+In the last processing step, the covariance matrix between all the features is calculated.  
+
+After finishing, a CSV file with the matrix is written [here](../../res/Grafics/Covarianz.csv).  
+The features are Structured as follows:
 
 1. score
-2. up_votes
-3. upvote_ratio
-4. num_comments
+1. up_votes
+1. upvote_ratio
+1. num_comments
 
 The Rest are the average slopes from the day on which the post was posted 
 until the 1 to the n day after the post. In which n ist the maximum number 
