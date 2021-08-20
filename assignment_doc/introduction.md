@@ -5,15 +5,15 @@ This project aims to check whether posts made by reddits self-proclaimed "retard
 ## Introduction
 
 ### WallstreetBets
-Since the start of the stock market craze in late 2020, one stock forum has again and again caught the medias attention.  
-Be it due to the crass language being used, the extremely risky trades being made, or the introduction of so-called meme stocks through gamestop,
+Since the start of the stock market craze in late 2020, one stock forum has repeatedly caught media attention.  
+Be it due to the crass language, the extremely risky trades, or the introduction of so-called meme stocks through gamestop,
 reddits WallStreetBets (WSB) forum has polarized financial media and consumer outlets alike.
 
-This project asks whether the hype surrounding WSB is valid or just hot air, and is a first step towards figuring out algorithms that can utilize WSB posts in realtime to predict market movements.
+This project asks whether the hype surrounding WSB is valid, and can be seen as a first step towards figuring out algorithms to capitalize on WSB posts by trying to predict market movements.
 
 ### Technical overview
 To accomplish this, WSB posts have been extracted for the past two months, searched for stock symbols and then persisted into a local database.  
-A correlation analysis between the collected data points, and the movement in stock prices over different durations have then been calculated.
+A correlation analysis between the collected data points, and the movement in stock prices over different durations has then been conducted.
 
 ## Implementation details
 Details on how this marvelous feat of software engineering was accomplished, can be found here:
