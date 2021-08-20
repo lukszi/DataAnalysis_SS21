@@ -1,20 +1,28 @@
 # Data Analysis Project
 
-The goal of this project is to extract mentions of stocksymbols from reddits wallstreetbets, and then search for 
-correlations in mention spikes and stock price shifts.
+This project aims to check whether posts made by reddits self-proclaimed "retards" on r/wallstreetbets, can in fact be used to predict market movements. 
 
 ## Introduction
 
-The project should use an api to extract many stocks mentioned on a subreddit 
-called WallStreetBets. It's a public forum where people post, argue and comment 
-on stuff about the stock market.
+### WallstreetBets
+Since the start of the stock market craze in late 2020, one stock forum has repeatedly caught media attention.  
+Be it due to the crass language, the extremely risky trades, or the introduction of so-called meme stocks through gamestop,
+reddits WallStreetBets (WSB) forum has polarized financial media and consumer outlets alike.
 
-With the extraction of the stock token and the time the post was made the 
-program should be able to get the specific stock data. And saves it in a
-database to be analysed later on.
+This project asks whether the hype surrounding WSB is valid, and can be seen as a first step towards figuring out algorithms to capitalize on WSB posts by trying to predict market movements.
 
-The goal is to find out weather the post have an impact on the stock.
-To find that out the program searches for correlations between the 
-stock data, and the data from the reddit post. The idea is to find a 
-correlation between something like the number of likes and the average slope
-of the stock.
+### Technical overview
+To accomplish this, WSB posts have been extracted for the past two months, searched for stock symbols and then persisted into a local database.  
+A correlation analysis between the collected data points, and the movement in stock prices over different durations has then been conducted.
+
+## Implementation details
+Details on how this marvelous feat of software engineering was accomplished, can be found here:
+* [Reddit extraction](implementation/reddit_extraction.md)
+* [Yahoo finance extraction](implementation/finance.md)
+* [Data persistence](implementation/database.md)
+* [Data evaluation](implementation/evaluation.md)
+
+## Outlook
+Since this project was only supposed to take two workdays, we focused on a minimum viable prototype, that could extract and analyse data in a basic manner.
+
+However, we believe, that with more metrics, like for example a sentiment analysis of the reddit posts, and a more detailed analysis of the given data we could achieve a more accurate and potentially interesting result.
