@@ -59,15 +59,18 @@ class RedditExtractor:
         first_submission: Optional[str] = None
 
         for i, submission in enumerate(submissions):
-            # Logic to continue from last parsed submission
+            # Logic to continue up to last parsed submission
             if first_submission is None:
                 first_submission = submission.url
-            # print(i, submission.title)
+            # Stop at submission that was previously found
             if stop_at_last_submission and self.__last_retrieved_post is not None:
-                # print("got last submission")
                 if submission.url == self.__last_retrieved_post:
                     break
-            # self.__submission_is_parsable(submission)
+
+            # Skip unparsable posts
+            if not self.__submission_is_parsable(submission):
+                continue
+
             mention = self.__extract_from_submission(submission)
             if mention is not None:
                 parsed_posts.append(mention)
@@ -85,7 +88,7 @@ class RedditExtractor:
         tickers_in_submission = self.__symbol_extractor.extract_symbols(submission)
         if len(tickers_in_submission) == 0:
             return None
-        return self.__create_model_object(submission, tickers_in_submission)
+        return RedditExtractor.__create_model_object(submission, tickers_in_submission)
 
     @staticmethod
     def __create_model_object(submission: Submission, tickers_in_submission: List[str]) -> StockMention:
@@ -112,11 +115,13 @@ class RedditExtractor:
                                username=self.__config["username"])
         self.__wsb = self.__reddit.subreddit("WallStreetBets")
 
-    def __submission_is_parsable(self, submission):
+    @staticmethod
+    def __submission_is_parsable(submission):
         return submission.is_self
 
 
 if __name__ == '__main__':
-    extractor = RedditExtractor()
+    smbl_xtrct = SymbolExtractor("../../res/ticker.csv")
+    extractor = RedditExtractor(smbl_xtrct)
     results = extractor.extract_last_n_submissions(2)
     print(results)
