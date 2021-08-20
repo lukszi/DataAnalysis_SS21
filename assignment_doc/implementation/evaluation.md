@@ -4,7 +4,7 @@ The source files relevant to this discussion can be found [here](../../AnalyseSt
 
 ## Scope
 
-The Evaluation uses the collected reddit data and data from yahoo finance to calculate covariances and plots some of the results.
+The Evaluation combines the collected reddit data with data from yahoo finance to calculate covariances and then plot the results results.
 
 ## Implementation
 
