@@ -28,13 +28,13 @@ def extract_and_safe_reddit_posts_in_database(last_n_submissions: int) -> None:
     print(time.time() - start_time)
 
     print(f"{datetime.now()}: Starting looped extraction")
-    extracted_items = len(results)
+    num_extracted_items = len(results)
     loops_ran = 0
     sleep_time = 60
     while True:
         try:
             results = extractor.extract_up_to_last_submission()
-            extracted_items += len(results)
+            num_extracted_items += len(results)
             safe_reddit_posts_in_database(results)
             loops_ran += 1
             print(f"{datetime.now()}: Extracted {len(results)} items this cycle, sleeping {sleep_time} seconds")
@@ -45,7 +45,7 @@ def extract_and_safe_reddit_posts_in_database(last_n_submissions: int) -> None:
         except ServerError as e:
             print(e)
 
-    print(f"{datetime.now()}: finished extracting {extracted_items} mentions in {loops_ran} cycles")
+    print(f"{datetime.now()}: finished extracting {num_extracted_items} mentions in {loops_ran} cycles")
 
 
 def safe_reddit_posts_in_database(results):
