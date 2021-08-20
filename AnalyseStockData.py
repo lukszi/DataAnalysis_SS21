@@ -50,7 +50,7 @@ def calculate_covarianz_for_lineare_correlations(stockdata):
     """
     values = np.delete(stockdata, 0, axis=1)
     cov = np.corrcoef(values.T.astype(float))
-    pd.DataFrame(cov).to_csv("res/Grafics/Covarianz.csv")
+    pd.DataFrame(cov).to_csv("res/Grafics/Covarianz.csv", delimiter='|')
 
 
 def plot_upvote_ratio_against_average_slope(stockdata):
