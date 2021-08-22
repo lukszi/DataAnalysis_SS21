@@ -39,7 +39,7 @@ The setup and implementation of the database had various issues.
 
 1. We hoped to create one Table with all the data until the point where we 
    found out that people mentioned many stocks in one post. So we had to add an 
-   array of stock tokens. But SQLAlchemy was not able to provide an easy way 
+   array of stock tokens. SQLAlchemy was not able to provide an easy way 
    to insert an array into a table. So we had to make another table with a 1 
    to n relation to capture all the stock tokens mentioned in a post.
    

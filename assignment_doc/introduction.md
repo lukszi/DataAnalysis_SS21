@@ -22,6 +22,9 @@ Details on how this marvelous feat of software engineering was accomplished, can
 * [Data persistence](implementation/database.md)
 * [Data evaluation](implementation/evaluation.md)
 
+## Results
+The results of our analysis can be found [here](results.md)
+
 ## Outlook
 Since this project was only supposed to take two workdays, we focused on a minimum viable prototype, that could extract and analyse data in a basic manner.
 
